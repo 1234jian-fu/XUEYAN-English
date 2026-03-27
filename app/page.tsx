@@ -1,103 +1,155 @@
-import Image from "next/image";
+"use client";
+
+import Link from "next/link";
+import { useMemo, useState } from "react";
+import { ArrowUpRight, Menu, Sparkles } from "lucide-react";
+
+import { characters, scenarioCategories, type Character } from "@/lib/characters";
+
+type CategoryFilter = (typeof scenarioCategories)[number]["id"];
+
+function CharacterCard({ character }: { character: Character }) {
+  return (
+    <Link
+      href={`/prepare/${character.id}`}
+      className="group overflow-hidden rounded-[28px] bg-white/90 p-5 shadow-[0_20px_40px_rgba(5,150,105,0.08)] ring-1 ring-emerald-100/80 backdrop-blur transition duration-200 active:scale-[0.99]"
+    >
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex min-w-0 items-center gap-4">
+          <div className="flex h-20 w-16 shrink-0 items-center justify-center rounded-[20px] bg-gradient-to-br from-emerald-50 to-slate-100 text-3xl shadow-sm ring-1 ring-emerald-100/80">
+            <span aria-hidden="true">{character.emoji}</span>
+          </div>
+          <div className="min-w-0">
+            <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-emerald-700/80">
+              <span>{character.flag}</span>
+              <span>{character.categoryLabel}</span>
+            </div>
+            <h2
+              className="mt-2 text-[30px] leading-none tracking-tight text-slate-900"
+              style={{ fontFamily: "var(--font-display)" }}
+            >
+              {character.name}
+            </h2>
+            <p className="mt-2 text-sm text-slate-500">{character.role}</p>
+          </div>
+        </div>
+
+        <span className="flex h-11 min-w-11 items-center justify-center rounded-full bg-emerald-600 text-white shadow-sm transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+          <ArrowUpRight className="h-4 w-4" />
+        </span>
+      </div>
+
+      <p className="mt-5 text-sm leading-6 text-slate-600">{character.tagline}</p>
+
+      <div className="mt-5 flex flex-wrap gap-2">
+        {character.preparationVocabulary.map((item) => (
+          <span
+            key={item.term}
+            className="rounded-full bg-emerald-50 px-3 py-1.5 text-[11px] font-semibold text-emerald-700"
+          >
+            {item.term}
+          </span>
+        ))}
+      </div>
+    </Link>
+  );
+}
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [activeCategory, setActiveCategory] = useState<CategoryFilter>("all");
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+  const filteredCharacters = useMemo(() => {
+    if (activeCategory === "all") {
+      return characters;
+    }
+
+    return characters.filter((character) => character.category === activeCategory);
+  }, [activeCategory]);
+
+  return (
+    <main className="min-h-screen bg-slate-50 text-slate-900">
+      <div className="mx-auto flex min-h-screen w-full max-w-md flex-col px-4 safe-pt safe-pb">
+        <header className="liquid-glass rounded-[32px] px-5 py-5">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-white/70 text-slate-700 ring-1 ring-emerald-100"
+              >
+                <Menu className="h-4 w-4" />
+              </button>
+              <div>
+                <p className="text-[11px] uppercase tracking-[0.22em] text-emerald-700/70">Digital Atelier</p>
+                <h1
+                  className="text-[30px] italic tracking-tight text-slate-900"
+                  style={{ fontFamily: "var(--font-display)" }}
+                >
+                  XUEYAN
+                </h1>
+              </div>
+            </div>
+
+            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-emerald-600 text-white shadow-sm">
+              <Sparkles className="h-4 w-4" />
+            </div>
+          </div>
+
+          <div className="mt-8 space-y-4">
+            <p className="text-[11px] uppercase tracking-[0.24em] text-slate-400">Choose your scenario</p>
+            <h2
+              className="max-w-[240px] text-[42px] leading-none italic tracking-tight text-emerald-700"
+              style={{ fontFamily: "var(--font-display)" }}
+            >
+              像进入作品集一样进入一场口语练习。
+            </h2>
+            <p className="max-w-[280px] text-sm leading-6 text-slate-500">
+              先选角色，再做词包预热，最后进入真实对话。整个流程专门按手机单手操作优化。
+            </p>
+          </div>
+        </header>
+
+        <section className="mt-6">
+          <div className="hide-scrollbar -mx-4 flex snap-x gap-2 overflow-x-auto px-4 pb-1">
+            {scenarioCategories.map((category) => {
+              const isActive = activeCategory === category.id;
+
+              return (
+                <button
+                  key={category.id}
+                  type="button"
+                  onClick={() => setActiveCategory(category.id)}
+                  className={`flex min-h-11 snap-start items-center rounded-full px-4 text-sm font-medium whitespace-nowrap transition ${
+                    isActive
+                      ? "bg-emerald-600 text-white shadow-sm"
+                      : "bg-white text-slate-600 ring-1 ring-slate-200"
+                  }`}
+                >
+                  {category.label}
+                </button>
+              );
+            })}
+          </div>
+        </section>
+
+        <section className="mt-6 flex items-end justify-between px-1">
+          <div>
+            <p
+              className="text-[28px] italic leading-none tracking-tight text-slate-900"
+              style={{ fontFamily: "var(--font-display)" }}
+            >
+              Your Partner
+            </p>
+            <p className="mt-2 text-sm text-slate-500">轻点卡片进入备战页</p>
+          </div>
+          <p className="text-[11px] uppercase tracking-[0.18em] text-slate-400">{filteredCharacters.length} roles</p>
+        </section>
+
+        <section className="mt-4 space-y-4">
+          {filteredCharacters.map((character) => (
+            <CharacterCard key={character.id} character={character} />
+          ))}
+        </section>
+      </div>
+    </main>
   );
 }

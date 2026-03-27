@@ -1,26 +1,174 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f8fafc;
+  --foreground: #0f172a;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-body);
+  --font-mono: var(--font-body);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scrollbar-width: none;
+  overflow-x: hidden;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
 body {
+  margin: 0;
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body), "Noto Sans SC", sans-serif;
+  overscroll-behavior-y: none;
+  overflow-x: hidden;
+}
+
+button,
+a,
+input,
+textarea {
+  outline: none;
+  touch-action: manipulation;
+}
+
+img,
+video {
+  max-width: 100%;
+}
+
+@utility hide-scrollbar {
+  scrollbar-width: none;
+}
+
+@utility safe-pb {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+
+@utility safe-pt {
+  padding-top: max(1rem, env(safe-area-inset-top));
+}
+
+.liquid-glass {
+  position: relative;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 20px 40px rgba(5, 150, 105, 0.08);
+}
+
+.liquid-glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.7),
+    rgba(255, 255, 255, 0.2)
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes soft-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.2);
+  }
+  70% {
+    box-shadow: 0 0 0 16px rgba(5, 150, 105, 0);
+  }
+}
+
+@keyframes orb-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.14), 0 18px 50px rgba(5, 150, 105, 0.2);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 18px rgba(16, 185, 129, 0), 0 24px 70px rgba(5, 150, 105, 0.32);
+  }
+}
+
+@keyframes orb-speaking {
+  0%,
+  100% {
+    transform: scale(1);
+    filter: saturate(1);
+  }
+  25% {
+    transform: scale(1.04, 0.98);
+  }
+  50% {
+    transform: scale(0.98, 1.04);
+    filter: saturate(1.15);
+  }
+  75% {
+    transform: scale(1.03, 1.01);
+  }
+}
+
+@keyframes halo-drift {
+  0%,
+  100% {
+    transform: scale(0.92);
+    opacity: 0.35;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 0.7;
+  }
+}
+
+@utility animate-fade-up {
+  animation: fade-up 0.35s ease-out both;
+}
+
+@utility animate-soft-pulse {
+  animation: soft-pulse 1.8s infinite;
+}
+
+.conversation-orb {
+  animation: orb-breathe 4.6s ease-in-out infinite;
+}
+
+.conversation-orb-speaking {
+  animation: orb-speaking 1.4s ease-in-out infinite;
+}
+
+.conversation-orb-halo {
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.18) 0%, rgba(16, 185, 129, 0.05) 45%, transparent 72%);
+  filter: blur(10px);
+  animation: halo-drift 4.8s ease-in-out infinite;
 }
